@@ -1,0 +1,108 @@
+class Book:
+    def __init__(self, title, author, ISBN):
+        self.title = title
+        self.author = author
+        self.ISBN = ISBN
+        self.is_borrowed = False
+
+    def borrow_book(self):
+        self.is_borrowed = True
+
+    def return_book(self):
+        self.is_borrowed = False
+
+    def __str__(self):
+        return f"Book(Title='{self.title}', Author='{self.author}', ISBN='{self.ISBN}', Borrowed={'Yes' if self.is_borrowed else 'No'})"
+
+
+class Library:
+    def __init__(self):
+        self.books = []
+
+    def add_book(self, book):
+        self.books.append(book)
+        print("Book added successfully!")
+
+    def search_book_by_ISBN(self, ISBN):
+        for book in self.books:
+            if book.ISBN == ISBN:
+                return book
+        return None
+
+    def borrow_book(self, ISBN):
+        book = self.search_book_by_ISBN(ISBN)
+        if book:
+            if not book.is_borrowed:
+                book.borrow_book()
+                print(f"You borrowed the book: {book.title}")
+            else:
+                print("This book is already borrowed.")
+        else:
+            print("Book not found.")
+
+    def return_book(self, ISBN):
+        book = self.search_book_by_ISBN(ISBN)
+        if book:
+            if book.is_borrowed:
+                book.return_book()
+                print(f"You returned the book: {book.title}")
+            else:
+                print("This book wasn't borrowed.")
+        else:
+            print("Book not found.")
+
+    def display_books(self):
+        if not self.books:
+            print("No books in the library.")
+        else:
+            for book in self.books:
+                print(book)
+
+
+def main():
+    library = Library()
+
+    while True:
+        print("\nLibrary Management System")
+        print("1. Add Book")
+        print("2. Search Book by ISBN")
+        print("3. Borrow Book")
+        print("4. Return Book")
+        print("5. Display All Books")
+        print("6. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            title = input("Enter Title: ")
+            author = input("Enter Author: ")
+            ISBN = input("Enter ISBN: ")
+            library.add_book(Book(title, author, ISBN))
+
+        elif choice == "2":
+            ISBN = input("Enter ISBN: ")
+            book = library.search_book_by_ISBN(ISBN)
+            print(book if book else "Book not found.")
+
+        elif choice == "3":
+            ISBN = input("Enter ISBN to borrow: ")
+            library.borrow_book(ISBN)
+
+        elif choice == "4":
+            ISBN = input("Enter ISBN to return: ")
+            library.return_book(ISBN)
+
+        elif choice == "5":
+            library.display_books()
+
+        elif choice == "6":
+            print("Exiting...")
+            break
+
+        else:
+            print("Invalid choice, please try again.")
+
+
+if __name__ == "__main__":
+    main()
+
